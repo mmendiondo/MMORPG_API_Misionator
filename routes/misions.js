@@ -104,9 +104,16 @@ var populateDB = function() {
         history: "History is short, just kill them",
         description: "Do you need a picture?, just kill them all",
         picture: "killeemm.jpg",
+       
+        level_required: 1,
+        sub_level_required: null,
+        class_required: "magical",
+        second_class_required: "witch",
         coins_requested: 0,
         coins_rewarded: 800,
-        items_requested: [      
+        experience_required: 0,
+        experience_rewarded: 800,
+        items_requested: [
         {
             item_id: 1, 
             name:"orc head", 
