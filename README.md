@@ -19,8 +19,13 @@ http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-
 Starting with simple mision requests so.
 
 "GET" /misions
+
 "POST" "/misions" mision_object
+
 "GET" /misions/:id
+
 "DELETE" "/misions/:id"
+
 "PUT" "/misions/:id" mision_object
+
 
