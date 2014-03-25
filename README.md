@@ -1,4 +1,4 @@
-MMORPG_API_Missionator
+MMORPG_API_Misionator
 =====================
 
 API to help mission creation from individual characters
