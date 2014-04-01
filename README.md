@@ -18,14 +18,26 @@ http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-
 
 Starting with simple mision requests so.
 
-"GET" /misions
 
-"POST" "/misions" mision_object
+app_id on body request
+METHODS AND PARAMETERS
 
-"GET" /misions/:id
+app.get('/misions/'), mision.getMisions); // Gets all misions
+app.get('/misions/active/'), mision.getActiveMisions); // Gets all active misions
+app.delete('/misions/mision_id'), mision.deleteMision); // Deletes specific mision by mision_id
+app.post('/misions/'); // Adds specific mision, passing mision in body req
 
-"DELETE" "/misions/:id"
+app.put('/misions/:mision_id'); // Updates specific mision by mision_id, passing mision in body req
+app.get('/misions/:mision_id'); // Gets specific mision by mision_id
+app.get('/misions/region/:region'); // Gets all misions by region
+app.get('/misions/player/active/:player_id',);// Gets player active misions by player_id
+app.get('/misions/player/:player_id');// Gets all player misions by player_id
 
-"PUT" "/misions/:id" mision_object
+
+app.put('/misions/player/complete/:mision_id');//Sets mision completed by mision_id, passing items as req_items in body req
 
 
+//need to clarify this method.. don't know if makes sense
+app.put('/misions/player/lookForCompletedMisions/:player_id', mision.lookForCompletedMisions);// Gets all player potencially completed misions, passing items as req_items in body req
+
+app.put('/misions/complete/lookFor/');// Gets all potencial completed misions, passing items as req_items in body req
