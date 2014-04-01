@@ -10,10 +10,8 @@ db = new Db('misiondb', server, {w:1});
 db.open(function(err, db) {
     if(!err) {
         console.log("Connected to 'misiondb' database");
-        db.collection('misions', {strict:true}, function(err, collection) {
-            if (err) {
-                populateDB();
-            }
+        db.collection('misions', {strict:true}, function(err, collection) {           
+            populateDB();
         });
     }
     else
@@ -167,7 +165,7 @@ exports.lookForCompletionMisions = function(req, res) {
              //create a method to validate this -----------TODO: REF 1---------
             var misions_complete = [];
             for (var i = 0; i < items.length; i++) {
-                if (hasEnoughItems(items[i].items_requested, mision_req_items))
+                if (hasTheItems(items[i].items_requested, mision_req_items))
                     misions_complete.push(items[i]);
             }           
             res.send(misions_complete);
@@ -177,13 +175,13 @@ exports.lookForCompletionMisions = function(req, res) {
 
 exports.lookForCompletionExternalMisions = function(req, res) {
     var application_id = req.params.application_id = "MMO_RPG_START";
-    var mision_req_items = req.body;
+    var all_my_items = req.body;
     db.collection('misions', function(err, collection) {
         collection.find({app_id: application_id}).toArray(function(err, items) {
             //create a method to validate this -----------TODO: REF 1---------
             var misions_complete = [];
             for (var i = 0; i < items.length; i++) {
-                if (hasEnoughItems(items[i].items_requested, mision_req_items))
+                if (hasTheItems(items[i].items_requested, all_my_items))
                     misions_complete.push(items[i]);
             }           
             res.send(misions_complete);
@@ -192,16 +190,44 @@ exports.lookForCompletionExternalMisions = function(req, res) {
 };
 
 //Odd solution, TODO: change for smarter one
-function hasEnoughItems(arr1, arr2)
+var hasTheItems = function (items_requested, all_my_items)
 {
+    var enough = false;
+    for (var i = 0; i < items_requested.length; i++) {
+        for (var j = 0; j < all_my_items.length; j++) {
+           enough = has_enough_of_this_item(items_requested[i], all_my_items[j]);
+           if (enough) break;
+        }
+        if (!enough) return false;
+    }
+    return enough;
     //here, check each item to see if there are enough to complete the requests for the mision
-    return JSON.stringify(arr1) == JSON.stringify(arr2);
-
+    //return JSON.stringify(items_requested) == JSON.stringify(all_my_items);
 }
+
+var has_enough_of_this_item = function(item_requested, my_item)
+{
+   return (item_requested.name == my_item.name && 
+            item_requested.quant <= my_item.quant &&
+            hasThePecularities(item_requested.peculiariaties, my_item.peculiariaties));
+}
+
+var hasThePecularities = function(item_req_pecs, item_i_have_pecs)
+{
+    for (var prop in item_req_pecs){
+        if (item_req_pecs[prop] != item_i_have_pecs[prop])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 // Populate database with sample data -- Only used once: the first time the application is started.
 // You'd typically not find this code in a real-life app, since the database would already exist.
+
 
 var populateDB = function() {
  
@@ -230,23 +256,60 @@ var populateDB = function() {
             item_id: 1, 
             name:"orc head", 
             quant: 20,
-            peculiariaties: [{status: "without orc body"}]
+            peculiariaties:  {status: "without orc body", weight: 100}
         }],
         items_rewarded: [
         {
             item_id: 2,
             name: "super axe", 
             quant: 1,
-            peculiariaties: [{damage_status: "20", item_class: "magical"}]
+            peculiariaties: {damage_status: "20", item_class: "magical"}
         }]
     }
     ];
- 
+
     db.collection('misions', function(err, collection) {
+        collection.remove({app_id: "MMO_RPG_START"}, {safe:true}, function(err, result) {});
         collection.insert(misions, {safe:true}, function(err, result) {});
     });
  
 };
+
+var schema = 
+ {       
+        app_id: String.empty,
+        misioner_id: String.empty,
+        mision_id: String.empty,
+        name: String.empty,
+        history: String.empty,
+        description: String.empty,
+        picture: String.empty,       
+        level_required: 0,
+        sub_level_required: 0,
+        class_required: String.empty,
+        second_class_required: String.empty,
+        coins_requested: 0,
+        coins_rewarded: 0,
+        experience_required: 0,
+        experience_rewarded: 0,
+        completed: false,
+        repetable: false,
+        region: String.empty,
+        items_requested: [
+        {
+            item_id: 0, 
+            name:String.empty,
+            quant: 0,
+            peculiariaties: {}
+        }],
+        items_rewarded: [
+        {
+            item_id: 0, 
+            name:String.empty,
+            quant: 0,
+            peculiariaties: {}
+        }]
+    }
 
 /*
 var populateDB = function() {
