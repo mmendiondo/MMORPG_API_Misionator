@@ -111,13 +111,12 @@ exports.addMision = function(req, res) {
     var application_id = req.params.application_id = "MMO_RPG_START";
     var mision = req.body;
     mision.application_id = application_id;
-    console.log('Adding mision: ' + JSON.stringify(mision));
+    
     db.collection('misions', function(err, collection) {
         collection.insert(mision, {safe:true}, function(err, result) {
             if (err) {
                 res.send({'error':'An error has occurred'});
             } else {
-                console.log('Success: ' + JSON.stringify(result[0]));
                 res.send(result[0]);
             }
         });

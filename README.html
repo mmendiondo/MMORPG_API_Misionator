@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Jade</title>
+    <title>Misionator</title>
     <script type="text/javascript">
     //Archive that helps from external html adding this scripts, within the browser console you can get post put delete 
 
@@ -314,6 +314,59 @@ function getPlayerMisions(player_id)
   xmlhttp.send();
 }
 
+function getPath(user_pos_x, user_pos_y, user_to_x, user_to_y)
+{
+  var xmlhttp;
+  if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+    }
+  else
+    {// code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+  xmlhttp.onreadystatechange=function()
+    {
+    if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        console.log(xmlhttp.responseText);
+      }
+    }
+
+  xmlhttp.open("GET","/paths" + 
+      "?user_pos[x]=" + user_pos_x +"&"+ 
+       "user_pos[y]=" + user_pos_y +"&"+  
+        "user_to[x]=" + user_to_x  +"&"+ 
+        "user_to[y]=" + user_to_y, true);
+  xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xmlhttp.send();
+}
+
+function setMatrix(matrix)
+{
+  var xmlhttp;
+  if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+    }
+  else
+    {// code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+  xmlhttp.onreadystatechange=function()
+    {
+    if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        console.log(xmlhttp.responseText);
+      }
+    }
+
+  xmlhttp.open("POST","/paths/matrix", true);
+  xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xmlhttp.send(JSON.stringify(matrix));
+}
+
+
     </script>
   </head>
 	<body>
@@ -375,6 +428,11 @@ function getPlayerMisions(player_id)
 			- put **misions/player/lookForCompletedMisions/:playerId** Gets all player potencially completed misions, passing items as req_items in body req
 			- put **misions/complete/lookFor/** Gets all potencial completed misions, passing items as req_items in body req
 		</div>
+    <p>
+    <div>
+       - post **paths/matrix** posting matrix as array like [[0,0,0,1,0], [0,0,0,0,0]] where 0 is walkable and 1 doesn't 
+     - get **paths** Getspath from and to within a matrix previously set giving by query strig user_pos[x], user_pos[y], user_to[x], user_to[y]
+     </div>
 		</p>
   </body>
 </html>
