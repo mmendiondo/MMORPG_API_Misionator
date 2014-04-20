@@ -24,6 +24,13 @@ db.open(function(err, db) {
 
 
 //All methods will check app_id Calling.
+exports.startUp = function(req, res)
+{
+    res.sendfile("README.html");
+};
+
+
+//All methods will check app_id Calling.
 exports.getMision = function(req, res)
 {
     var application_id = req.params.application_id = "MMO_RPG_START";
@@ -32,7 +39,6 @@ exports.getMision = function(req, res)
     db.collection('misions', function(err, collection) {
         collection.findOne({'_id':new BSON.ObjectID(mision_id), app_id: application_id}, function(err, item) {
             res.send(item);
-            console.log(item);
         });
     });
 };

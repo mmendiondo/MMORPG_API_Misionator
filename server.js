@@ -6,9 +6,11 @@ var app = express();
 app.configure(function () {
     app.use(express.logger('dev'));     /* 'default', 'short', 'tiny', 'dev' */
     app.use(express.bodyParser());
+   //	app.use(express.static("/"));
 });
 
 
+app.get('/', mision.startUp); // Gets all misions
 app.get('/misions', mision.getMisions); // Gets all misions
 app.get('/misions/active', mision.getActiveMisions); // Gets all active misions
 app.delete('/misions/:mision_id', mision.deleteMision); // Deletes specific mision by mision_id
