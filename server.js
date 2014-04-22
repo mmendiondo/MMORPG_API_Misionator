@@ -36,5 +36,13 @@ app.post('/misions/complete/lookFor', mision.lookForCompletionExternalMisions);/
 app.get('/paths', paths.getPath); 
 app.post('/paths/matrix', paths.setMatrix);
 
+
+app.get('/players', paths.getPlayers); 
+app.get('/players/:player_id', paths.getPlayer); 
+app.post('/players', paths.addPlayer);
+app.put('/players/:player_id', paths.updatePlayer);
+app.delete('/players', paths.deletePlayer);
+app.put('/players/position', paths.updatePlayerPosition);
+
 app.listen(3000);
 console.log('Listening on port 3000...');
