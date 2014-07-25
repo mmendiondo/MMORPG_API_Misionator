@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>CasinoRed proof of concepts</title>
+</head>
+<body>
+   <canvas id="canvas" width="1024" height="768"></canvas>
+    <script type="text/javascript">
+
+var resCount = 2;
+
+var img = new Image();
+img.onload = launchMe;
+img.src = 'http://localhost/game/tile.png';
+
+
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+
+var displayCenterX = 0;
+var displayCenterY = canvas.height ;
+
+ctx.textBaseline = 'top';
+ctx.font = '10px sans-serif';
+ctx.fillStyle = '#00FFFF';
+
+window.onload = launchMe;
+
+function launchMe() {
+    ctx.setTransform(2,-1,1,0.5,displayCenterX,displayCenterY);
+    if (--resCount == 0) render();
+}
+
+function render() {
+   for(var i = 0;i< 40;i++){
+        for(var j = 0;j< 40;j++){
+          ctx.drawImage(img,i*32,j*32,32,32);
+        }
+    }
+    // ctx.setTransform(1,0,0,1,  displayCenterX -  mousePos[0], displayCenterY - mousePos[1]);
+    // ctx.rotate(-30*Math.PI/180);
+    // ctx.drawImage(charac,0,0,25,50,7*32,7*32,32,32);
+}
+
+var mousePos = [0, 0];
+var mouseDown = false;
+var rect = canvas.getBoundingClientRect();
+
+function animate() {
+        requestAnimationFrame(animate);
+        if (mouseDown) {
+            ctx.setTransform(1,0,0,1,0,0);
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+
+            ctx.setTransform(1,0,0,0.7,  displayCenterX -  mousePos[0], displayCenterY - mousePos[1]);
+            ctx.rotate(-45*Math.PI/180);
+            render();
+        }
+
+    }
+
+animate();
+
+function getMousePos(canvas, evt) {
+        mousePos[0] = evt.clientX - rect.left;
+        mousePos[1] = evt.clientY - rect.top;
+    }
+
+  canvas.addEventListener('mousedown', function (evt) {
+      mouseDown = true;
+      getMousePos(canvas, evt);
+  }, false);
+
+  canvas.addEventListener('mouseup', function (evt) {
+      mouseDown = false;
+      getMousePos(canvas, evt);
+  }, false);
+
+  canvas.addEventListener('mouseout', function (evt) {
+      mouseDown = false;
+  }, false);
+
+  canvas.addEventListener('mousemove', function (evt) {
+      getMousePos(canvas, evt);
+  }, false);
+
+
+</script>
+</body>
+</html>
+
+
