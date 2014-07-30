@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'game_font';
+    src: url('fFrom_Cartoon_Blocks.ttf');
+    src: url('From_Cartoon_Blocks.ttf?#iefix') format('embedded-opentype'),
+         url('From_Cartoon_Blocks.ttf') format('truetype'),
+         url('From_Cartoon_Blocks.ttf') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    margin: 0;
+    background: #898989;
+}
