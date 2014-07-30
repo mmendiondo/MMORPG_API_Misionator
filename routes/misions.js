@@ -21,7 +21,6 @@ db.open(function(err, db) {
     }
 });
 
-
 //All methods will check app_id Calling.
 exports.startUp = function(req, res)
 {
