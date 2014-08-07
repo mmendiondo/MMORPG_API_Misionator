@@ -167,7 +167,7 @@ exports.lookForCompletionMisions = function(req, res) {
             for (var i = 0; i < items.length; i++) {
                 if (hasTheItems(items[i].items_requested, mision_req_items))
                     misions_complete.push(items[i]);
-            }           
+            } 
             res.send(misions_complete);
         });
     });
