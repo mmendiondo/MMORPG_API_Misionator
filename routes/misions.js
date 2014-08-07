@@ -1,12 +1,11 @@
 var mongo = require('mongodb');
- 
 var Server = mongo.Server,
     Db = mongo.Db,
     BSON = mongo.BSONPure;
- 
+
 var server = new Server('localhost', 27017, {auto_reconnect: true});
 db = new Db('misiondb', server, {w:1});
- 
+
 db.open(function(err, db) {
     if(!err) {
         console.log("Connected to 'misiondb' database");
@@ -20,6 +19,12 @@ db.open(function(err, db) {
     }
 });
 
+//All methods will check app_id Calling.
+exports.startUp = function(req, res)
+{
+    res.sendfile("index.html");
+};
+
 
 //All methods will check app_id Calling.
 exports.getMision = function(req, res)
@@ -30,7 +35,6 @@ exports.getMision = function(req, res)
     db.collection('misions', function(err, collection) {
         collection.findOne({'_id':new BSON.ObjectID(mision_id), app_id: application_id}, function(err, item) {
             res.send(item);
-            console.log(item);
         });
     });
 };
@@ -97,31 +101,29 @@ exports.deleteMision = function(req, res) {
             }
         });
     });
-}
+};
 
 exports.addMision = function(req, res) {
     var application_id = req.params.application_id = "MMO_RPG_START";
     var mision = req.body;
     mision.application_id = application_id;
-    console.log('Adding mision: ' + JSON.stringify(mision));
+
     db.collection('misions', function(err, collection) {
         collection.insert(mision, {safe:true}, function(err, result) {
             if (err) {
                 res.send({'error':'An error has occurred'});
             } else {
-                console.log('Success: ' + JSON.stringify(result[0]));
                 res.send(result[0]);
             }
         });
     });
-}
- 
+};
+
 exports.updateMision = function(req, res) {
     var application_id = req.params.application_id = "MMO_RPG_START";
     var mision_id = req.params.mision_id;
     var mision = req.body;
     console.log('Updating mision: ' + mision_id);
-   
     db.collection('misions', function(err, collection) {
         collection.update({'_id':new BSON.ObjectID(mision_id), app_id: application_id}, mision, {safe:true}, function(err, result) {
             if (err) {
@@ -133,7 +135,7 @@ exports.updateMision = function(req, res) {
             }
         });
     });
-}
+};
 
 exports.completeMision = function(req, res) {
      var application_id = req.params.application_id = "MMO_RPG_START";
@@ -154,7 +156,7 @@ exports.completeMision = function(req, res) {
             }
         });
     });
-}
+};
 
 exports.lookForCompletionMisions = function(req, res) {
     var application_id = req.params.application_id = "MMO_RPG_START";
@@ -167,7 +169,11 @@ exports.lookForCompletionMisions = function(req, res) {
             for (var i = 0; i < items.length; i++) {
                 if (hasTheItems(items[i].items_requested, mision_req_items))
                     misions_complete.push(items[i]);
+<<<<<<< HEAD
             } 
+=======
+            }
+>>>>>>> 2b92f211f047dfdc1d818b7197b1d686164703b3
             res.send(misions_complete);
         });
     });
@@ -183,7 +189,7 @@ exports.lookForCompletionExternalMisions = function(req, res) {
             for (var i = 0; i < items.length; i++) {
                 if (hasTheItems(items[i].items_requested, all_my_items))
                     misions_complete.push(items[i]);
-            }           
+            }
             res.send(misions_complete);
         });
     });
@@ -230,16 +236,15 @@ var hasThePecularities = function(item_req_pecs, item_i_have_pecs)
 
 
 var populateDB = function() {
- 
    var misions = [
-    {       
+    {
         app_id: "MMO_RPG_START",
         misioner_id: "1",
         mision_id: "1",
-        name: "kill'em all", 
+        name: "kill'em all",
         history: "History is short, just kill them",
         description: "Do you need a picture?, just kill them all",
-        picture: "killeemm.jpg",       
+        picture: "killeemm.jpg",
         level_required: 1,
         sub_level_required: null,
         class_required: "magical",
@@ -253,26 +258,28 @@ var populateDB = function() {
         region: "Tall Guiso",
         items_requested: [
         {
-            item_id: 1, 
-            name:"orc head", 
+            item_id: 1,
+            name:"orc head",
             quant: 20,
             peculiariaties:  {status: "without orc body", weight: 100}
         }],
         items_rewarded: [
         {
             item_id: 2,
-            name: "super axe", 
+            name: "super axe",
             quant: 1,
             peculiariaties: {damage_status: "20", item_class: "magical"}
         }]
     }
     ];
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2b92f211f047dfdc1d818b7197b1d686164703b3
     db.collection('misions', function(err, collection) {
         collection.remove({app_id: "MMO_RPG_START"}, {safe:true}, function(err, result) {});
         collection.insert(misions, {safe:true}, function(err, result) {});
     });
- 
 };
 
 var schema = 

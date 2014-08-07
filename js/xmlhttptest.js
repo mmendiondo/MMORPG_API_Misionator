@@ -172,7 +172,7 @@ function lookForCompletionMisions(player_id)
             item_id: 1,
             name:"orc head",
             quant: 20,
-            peculiariaties: {status: "without orc body", weight: 100}
+            peculiariaties: [{status: "without orc body"}]
         }];
 
   xmlhttp.open("POST","/misions/player/complete/lookFor/" + player_id.toString(), true);
@@ -205,7 +205,7 @@ function lookForCompletionExternalMisions()
             item_id: 1,
             name:"orc head",
             quant: 20,
-            peculiariaties: {status: "without orc body", weight: 100, saracatunga: "que no es necesaria"}
+            peculiariaties: [{status: "without orc body"}]
         }];
 
          console.log(JSON.stringify(mision.items_requested));
