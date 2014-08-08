@@ -1,48 +1,59 @@
+///HTTPOBJECT
+var apiServer = "http://172.17.15.152:3000/";
+
+var xhr = function() {
+  var xhr = new XMLHttpRequest();
+  if (!window.XMLHttpRequest) xhr=new ActiveXObject("Microsoft.XMLHTTP");
+  return function( method, url, request_data, callback ) {
+      xhr.onreadystatechange = function() {
+          if ( xhr.readyState === 4 ) {
+              callback( xhr.responseText );
+          }
+      };
+      xhr.open( method, apiServer + url);
+      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      if (request_data)
+        xhr.send(request_data);
+      else
+        xhr.send();
+    };
+}();
+
+
+function getResponse(data) {
+  console.log("ok");
+  return data;
+}
+
+///HTTPOBJECT
+
+var GET_MISIONS = "misions",
+    POST_MISION = "misions",
+    GET_PATH = "paths",
+    SET_MATRIX = "paths/matrix"
+
+ ;
+
+
+function getPath(user_pos_x, user_pos_y, user_to_x, user_to_y)
+{
+  xhr("GET", GET_PATH + "?" + "user_pos[x]=" + user_pos_x + "&" + "user_pos[y]="+
+    user_pos_y + "&" + "user_to[x]=" + user_to_x  + "&" + "user_to[y]=" + user_to_y, null, getResponse);
+}
+
+function setMatrix(matrix)
+{
+   xhr("POST", SET_MATRIX, JSON.stringify(matrix), getResponse);
+}
 
 function addNewMision()
 {
-  var xmlhttp;
-  if (window.XMLHttpRequest)
-    {// code for IE7+, Firefox, Chrome, Opera, Safari
-    xmlhttp=new XMLHttpRequest();
-    }
-  else
-    {// code for IE6, IE5
-    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-  xmlhttp.onreadystatechange=function()
-    {
-    if (xmlhttp.readyState==4 && xmlhttp.status==200)
-      {
-        console.log(xmlhttp.responseText);
-      }
-    };
-  xmlhttp.open("POST","/misions", true);
-  xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xmlhttp.send(JSON.stringify(mision));
+  xhr("POST",POST_MISION, JSON.stringify(mision), getResponse);
 }
 
 function getMisions()
 {
-  var xmlhttp;
-  if (window.XMLHttpRequest)
-    {// code for IE7+, Firefox, Chrome, Opera, Safari
-    xmlhttp=new XMLHttpRequest();
-    }
-  else
-    {// code for IE6, IE5
-    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-  xmlhttp.onreadystatechange=function()
-    {
-    if (xmlhttp.readyState==4 && xmlhttp.status==200)
-      {
-        console.log(xmlhttp.responseText);
-      }
-    };
-  xmlhttp.open("GET","/misions", true);
-  xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xmlhttp.send();
+  xhr("GET", GET_MISIONS, null, getResponse);
 }
 
 function getMision(obj_id)
@@ -60,7 +71,7 @@ function getMision(obj_id)
     {
     if (xmlhttp.readyState==4 && xmlhttp.status==200)
       {
-        console.log(xmlhttp.responseText);
+       return xmlhttp.responseText;
       }
     };
   xmlhttp.open("GET","/misions/" + obj_id.toString(), true);
@@ -83,7 +94,7 @@ function updateMision(object_id)
     {
     if (xmlhttp.readyState==4 && xmlhttp.status==200)
       {
-         console.log(xmlhttp.responseText);
+         return xmlhttp.responseText;
       }
     };
   xmlhttp.open("PUT","/misions/" + object_id, true);
@@ -107,7 +118,7 @@ function deleteMision(object_id)
     {
     if (xmlhttp.readyState==4 && xmlhttp.status==200)
       {
-        console.log(xmlhttp.responseText);
+        return xmlhttp.responseText;
       }
     };
   xmlhttp.open("DELETE","/misions/" + object_id, true);
@@ -130,7 +141,7 @@ function completeMision(mision_id)
     {
     if (xmlhttp.readyState==4 && xmlhttp.status==200)
       {
-         console.log(xmlhttp.responseText);
+         return xmlhttp.responseText;
       }
     };
     mision = {};
@@ -163,7 +174,7 @@ function lookForCompletionMisions(player_id)
     {
     if (xmlhttp.readyState==4 && xmlhttp.status==200)
       {
-         console.log(xmlhttp.responseText);
+         return xmlhttp.responseText;
       }
     };
   mision = {};
@@ -172,7 +183,7 @@ function lookForCompletionMisions(player_id)
             item_id: 1,
             name:"orc head",
             quant: 20,
-            peculiariaties: {status: "without orc body", weight: 100}
+            peculiariaties: [{status: "without orc body"}]
         }];
 
   xmlhttp.open("POST","/misions/player/complete/lookFor/" + player_id.toString(), true);
@@ -196,7 +207,7 @@ function lookForCompletionExternalMisions()
     {
     if (xmlhttp.readyState==4 && xmlhttp.status==200)
       {
-         console.log(xmlhttp.responseText);
+         return xmlhttp.responseText;
       }
     };
   mision = {};
@@ -205,7 +216,7 @@ function lookForCompletionExternalMisions()
             item_id: 1,
             name:"orc head",
             quant: 20,
-            peculiariaties: {status: "without orc body", weight: 100, saracatunga: "que no es necesaria"}
+            peculiariaties: [{status: "without orc body"}]
         }];
 
          console.log(JSON.stringify(mision.items_requested));
@@ -230,7 +241,7 @@ function getActiveMisions()
     {
     if (xmlhttp.readyState==4 && xmlhttp.status==200)
       {
-        console.log(xmlhttp.responseText);
+        return xmlhttp.responseText;
       }
     };
   xmlhttp.open("GET","/misions/active/", true);
@@ -253,7 +264,7 @@ function getRegionMisions(region)
     {
     if (xmlhttp.readyState==4 && xmlhttp.status==200)
       {
-        console.log(xmlhttp.responseText);
+        return xmlhttp.responseText;
       }
     };
   xmlhttp.open("GET","/misions/region/" + region.toString(), true);
@@ -276,7 +287,7 @@ function getPlayerActiveMisions(player_id)
     {
     if (xmlhttp.readyState==4 && xmlhttp.status==200)
       {
-        console.log(xmlhttp.responseText);
+        return xmlhttp.responseText;
       }
     };
   xmlhttp.open("GET","/misions/player/active/" + player_id.toString(), true);
@@ -299,63 +310,10 @@ function getPlayerMisions(player_id)
     {
     if (xmlhttp.readyState==4 && xmlhttp.status==200)
       {
-        console.log(xmlhttp.responseText);
+        return xmlhttp.responseText;
       }
     };
   xmlhttp.open("GET","/misions/player/" + player_id.toString(), true);
   xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xmlhttp.send();
-}
-
-function getPath(user_pos_x, user_pos_y, user_to_x, user_to_y)
-{
-  var xmlhttp;
-  if (window.XMLHttpRequest)
-    {// code for IE7+, Firefox, Chrome, Opera, Safari
-    xmlhttp=new XMLHttpRequest();
-    }
-  else
-    {// code for IE6, IE5
-    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-  xmlhttp.onreadystatechange=function()
-    {
-    if (xmlhttp.readyState==4 && xmlhttp.status==200)
-      {
-        console.log(xmlhttp.responseText);
-      }
-    };
-
-  xmlhttp.open("GET","/paths" +
-      "?user_pos[x]=" + user_pos_x +"&"+
-       "user_pos[y]=" + user_pos_y +"&"+
-        "user_to[x]=" + user_to_x  +"&"+
-        "user_to[y]=" + user_to_y, true);
-  xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xmlhttp.send();
-}
-
-function setMatrix(matrix)
-{
-  var xmlhttp;
-  if (window.XMLHttpRequest)
-    {// code for IE7+, Firefox, Chrome, Opera, Safari
-    xmlhttp=new XMLHttpRequest();
-    }
-  else
-    {// code for IE6, IE5
-    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-  xmlhttp.onreadystatechange=function()
-    {
-    if (xmlhttp.readyState==4 && xmlhttp.status==200)
-      {
-        console.log(xmlhttp.responseText);
-      }
-    };
-
-  xmlhttp.open("POST","/paths/matrix", true);
-  xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xmlhttp.send(JSON.stringify(matrix));
 }
