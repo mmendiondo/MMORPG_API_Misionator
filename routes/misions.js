@@ -3,21 +3,21 @@ var Server = mongo.Server,
     Db = mongo.Db,
     BSON = mongo.BSONPure;
 
-var server = new Server('localhost', 27017, {auto_reconnect: true});
-db = new Db('misiondb', server, {w:1});
+var MONGODB_URI = process.env.MONGOLAB_URI ||
+  process.env.MONGOHQ_URL ||
+  'mongodb://localhost/misiondb';
 
-db.open(function(err, db) {
-    if(!err) {
-        console.log("Connected to 'misiondb' database");
-        db.collection('misions', {strict:true}, function(err, collection) {
-            populateDB();
-        });
-    }
-    else
-    {
-         console.log(err);
-    }
+var db;
+var coll;
+
+mongo.MongoClient.connect(MONGODB_URI, function(err, database) {
+    if(err) throw err;
+    db = database;
+    db.collection('misions', {strict:true}, function(errs, collection) {
+        populateDB();
+    });
 });
+
 
 //All methods will check app_id Calling.
 exports.startUp = function(req, res)

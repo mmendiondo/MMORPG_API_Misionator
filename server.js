@@ -2,6 +2,7 @@ var express = require('express'),
     mision = require('./routes/misions'),
     paths = require('./routes/paths');
 
+var mongodb = require('mongodb');
 var app = express();
 
 app.configure(function () {
@@ -30,6 +31,9 @@ app.configure(function () {
 });
 
 
+app.listen(3000);
+console.log('Listening on port 3000...');
+
 //MISIONS
 app.get('/', mision.startUp); // Gets all misions
 app.get('/misions', mision.getMisions); // Gets all misions
@@ -54,7 +58,3 @@ app.post('/misions/complete/lookFor', mision.lookForCompletionExternalMisions);/
 //req.query.user_to gets user_to from query_string like user_to[x]=1&user_to[y]=2
 app.get('/paths', paths.getPath);
 app.post('/paths/matrix', paths.setMatrix);
-
-
-app.listen(3000);
-console.log('Listening on port 3000...');
