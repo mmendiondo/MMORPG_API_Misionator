@@ -6,7 +6,6 @@ exports.setMatrix = function(req, res)
 {
     var application_id = req.params.application_id = "MMO_RPG_START";
     matrix = req.body;
-    console.log(matrix);
     res.send(matrix);
 };
 

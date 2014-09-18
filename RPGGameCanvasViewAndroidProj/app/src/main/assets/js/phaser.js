@@ -8842,7 +8842,8 @@ PIXI.TilingSprite.prototype._renderCanvas = function(renderSession)
 //(this.anchor.x) * -frame.width,
 //                               (this.anchor.y) * -frame.height,
 
-         
+           context.setTransform(0.5, transform.c, transform.b, 0.35, transform.tx , transform.ty);
+
     context.setTransform(transform.a, transform.c, transform.b, transform.d, transform.tx , transform.ty);
 
 
@@ -34232,6 +34233,8 @@ Phaser.Canvas = {
         canvas.height = height;
 
         canvas.style.display = 'block';
+
+        canvas.getContext('2d').setTransform(0.5,0,0,0.35,  0, 0);
 
         return canvas;
 

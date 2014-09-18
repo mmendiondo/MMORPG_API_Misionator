@@ -20,11 +20,15 @@ function preload() {
 
 function create() {
 
+    // game.context.setTransform(0.5,0,0,0.35,  0, 0);
+    // game.context.rotate(-45*Math.PI/180);
 
-    game.context.setTransform(0.5,0,0,0.35,  0, 0);
-    game.context.rotate(-45*Math.PI/180);
+    //this.game.context.save();
+    //this.game.context.setTransform(0.5,0,0,0.35,  0, 0);
 
-    game.context.save();
+    //Phaser.TilemapLayer.context.setTransform(0.5,0,0,0.35,  0, 0);
+
+game.context.setTransform(0.5,0,0,0.35,  0, 0);
 
     character = game.add.sprite(0, 0, 'character');
 
@@ -34,7 +38,7 @@ function create() {
 
     game.physics.startSystem(Phaser.Physics.P2JS);
 
-     game.physics.p2.enable(character);
+    game.physics.p2.enable(character);
 
     character = game.add.sprite(game.world.centerX, game.world.centerY, 'character');
 

@@ -31,7 +31,6 @@ var GET_MISIONS = "misions",
     POST_MISION = "misions",
     GET_PATH = "paths",
     SET_MATRIX = "paths/matrix"
-
  ;
 
 
