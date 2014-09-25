@@ -138,21 +138,27 @@ exports.updateMision = function(req, res) {
 };
 
 exports.completeMision = function(req, res) {
-     var application_id = req.params.application_id = "MMO_RPG_START";
+    var application_id = req.params.application_id = "MMO_RPG_START";
     var mision_id = req.params.mision_id;
     var mision_reqs = req.body;
 
-    console.log('Updating mision: ' + mision_id);
-    console.log("Have everything? : " + JSON.stringify(mision_reqs));
-
     db.collection('misions', function(err, collection) {
-        collection.update({'_id':new BSON.ObjectID(mision_id), app_id: application_id, items_requested: mision_reqs.items}, {$set: {completed:true}}, {safe:true}, function(err, result) {
-            if (err) {
-                console.log('Error updating mision: ' + err);
-                res.send({'error':'An error has occurred'});
-            } else {
-                console.log('' + result + ' document(s) updated');
-                res.send(result || "No mision to complete");
+
+        collection.find({'_id':new BSON.ObjectID(mision_id), app_id: application_id}).toArray(function(err, items){
+
+            if (hasTheItems(items[0].items_requested, mision_reqs)){
+               collection.update({'_id':new BSON.ObjectID(mision_id), app_id: application_id}, {$set: {completed:true}}, {safe:true}, function(err, result) {
+                    if (err) {
+                        res.send({'error':'An error has occurred'});
+                    }
+                    else{
+                        console.log('' + result + ' document(s) updated');
+                        res.send(items[0].items_rewarded);
+                    }
+                });
+            }
+            else{
+                res.send("no misions to be completed");
             }
         });
     });
